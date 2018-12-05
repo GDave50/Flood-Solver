@@ -7,6 +7,7 @@ import main.Parameters;
 
 /**
  * This class holds static functions for operating on a game board.
+ * 
  * @author Gage Davidson
  */
 public class Board {

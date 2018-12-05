@@ -12,9 +12,10 @@ import search.RemoteSearch;
 import search.Search;
 
 /**
- * This class will be used on remote machines. It will receive
- * a node remotely and find a solution based on that node and
- * then send the solution node back to the server.
+ * This class is used on remote machines. It receives a
+ * node remotely and finds a solution based on that node and
+ * then sends the solution node back to the server.
+ * 
  * @author Gage Davidson
  */
 class RemoteSolver {
@@ -31,30 +32,11 @@ class RemoteSolver {
 					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 				
-				// get and set parameters
-				String[] args = (String[]) in.readObject();
-				Parameters.setParameters(args);
-				System.out.println("Parameters set");
-				
-				// receive initial node and find solution
-				Node leafNode = (Node) in.readObject();
-				Search search = new Search(leafNode);
-				System.out.println("Node received; running search");
-				search.run();
-				
-				// send solution to server
-				Node solutionLeaf = search.getSolutionLeaf();
-				out.writeObject(solutionLeaf);
-				System.out.println("Solution leaf sent to server");
+				communicateServer(out, in);
 				
 			} catch (UnknownHostException ex) {
 				System.out.println("Unknown host: " + ex.getMessage());
 			} catch (IOException ex) {
-				if (ex.getMessage().equals("Connection refused: connect")) {
-					System.out.println("No server found");
-					continue;
-				}
-				
 				System.out.println("IOException: " + ex.getMessage());
 			} catch (ClassNotFoundException ex) {
 				System.out.println("Class not found: " + ex.getMessage());
@@ -66,5 +48,32 @@ class RemoteSolver {
 				System.out.println("InterruptedException: " + ex.getMessage());
 			}
 		}
+	}
+	
+	/**
+	 * Does the communication with the server. In the process it finds
+	 * the solution to the node.
+	 * @param out oos
+	 * @param in ois
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	private static void communicateServer(ObjectOutputStream out, ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// get and set parameters
+		String[] args = (String[]) in.readObject();
+		Parameters.setParameters(args);
+		System.out.println("Parameters set");
+		
+		// receive initial node and find solution
+		Node leafNode = (Node) in.readObject();
+		Search search = new Search(leafNode);
+		System.out.println("Node received; running search");
+		search.run();
+		
+		// send solution to server
+		Node solutionLeaf = search.getSolutionLeaf();
+		out.writeObject(solutionLeaf);
+		System.out.println("Solution leaf sent to server");
 	}
 }

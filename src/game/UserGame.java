@@ -3,7 +3,8 @@ package game;
 import java.awt.Graphics;
 
 /**
- * Handles the game if played by the user.
+ * Handles the game control and logic if played by the user.
+ * 
  * @author Gage Davidson
  */
 public class UserGame {
@@ -63,7 +64,7 @@ public class UserGame {
 	 * 
 	 * @param g Graphics to use
 	 */
-	public synchronized void drawGame(Graphics g) {
+	public void drawGame(Graphics g) {
 		Board.drawBoard(board, g);
 	}
 	
