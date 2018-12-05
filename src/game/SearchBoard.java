@@ -2,7 +2,8 @@ package game;
 
 /**
  * This class contains functions that help with searching the board
- * for various purposes.
+ * for various purposes. None of these methods alter the board.
+ * 
  * @author Gage Davidson
  */
 public class SearchBoard {
@@ -20,9 +21,9 @@ public class SearchBoard {
 	
 	/**
 	 * Search the board and mark all slots that should be changed.
-	 * This method does not change the board.
 	 * @param color color to search and mark for
-	 * @return
+	 * @return 2D boolean array with marks in each slot where color
+	 * should be changed
 	 */
 	synchronized boolean[][] search(Color color) {
 		searched = new boolean[board.length][board[0].length];

@@ -1,5 +1,10 @@
 package game;
 
+/**
+ * Possible colors for the game.
+ * 
+ * @author Gage Davidson
+ */
 public enum Color {
 	
 	RED      ("RED",      java.awt.Color.RED),
@@ -13,8 +18,8 @@ public enum Color {
 			RED, BLUE, GREEN, YELLOW, MAGENTA, CYAN };
 	
 	final String name;
-	final char nameChar;
-	final java.awt.Color color;
+	final char nameChar; // first letter of the color's name
+	final java.awt.Color color; // AWT color correspondent
 	
 	Color(String name, java.awt.Color color) {
 		this.name = name;

@@ -12,6 +12,7 @@ import main.Parameters;
 
 /**
  * This class handles the search for the solution.
+ * 
  * @author Gage Davidson
  */
 public class Search implements Runnable {
@@ -25,6 +26,9 @@ public class Search implements Runnable {
 	private ExecutorService exec;
 	private Node solutionLeaf;
 	
+	/**
+	 * @param board Board to use for root node
+	 */
 	public Search(Color[][] board) {
 		nameGenerator = new AtomicInteger();
 		completedNodes = new ConcurrentLinkedQueue<>();
@@ -36,6 +40,9 @@ public class Search implements Runnable {
 		exec = Executors.newFixedThreadPool(Parameters.maxThreads());
 	}
 	
+	/**
+	 * @param node root node of the search
+	 */
 	public Search(Node node) {
 		nameGenerator = new AtomicInteger();
 		nameGenerator.set(node.id + 1);

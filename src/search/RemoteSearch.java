@@ -17,12 +17,13 @@ import main.Parameters;
  * This class is run on a local machine and handles the
  * search for the solution. The search is done remotely
  * on other computers.
+ * 
  * @author Gage Davidson
  */
 public class RemoteSearch implements Runnable {
 	
-	public static final String HOST = "129.3.223.169";
-	public static final int PORT = 20001;
+	public static final String HOST = "129.3.20.26";
+	public static final int PORT = 2600;
 	
 	private Node root;
 	private Node[] leaves;
@@ -160,17 +161,7 @@ public class RemoteSearch implements Runnable {
 			try (ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())) {
 				
-				// send program parameters
-				out.writeObject(Parameters.getArgs());
-				
-				// send initial node
-				int leafIndex = this.leafIndex.getAndIncrement();
-				Node leafNode = leaves[leafIndex];
-				out.writeObject(leafNode);
-				
-				// receive solution node from remote solver
-				Node solutionLeaf = (Node) in.readObject();
-				completedNodes.add(solutionLeaf);
+				communicateClient(out, in);
 				
 			} catch (IOException ex) {
 				System.out.println("IOException while handling client: " + ex.getMessage());
@@ -187,6 +178,29 @@ public class RemoteSearch implements Runnable {
 			finishedSolvers.incrementAndGet();
 			System.out.println(finishedSolvers.get() + " solvers done");
 		}).start();
+	}
+	
+	/**
+	 * Performs the communication with the client, receiving a
+	 * solution node at the end
+	 * @param out oos
+	 * @param in ois
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void communicateClient(ObjectOutputStream out, ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		// send program parameters
+		out.writeObject(Parameters.getArgs());
+		
+		// send initial node
+		int leafIndex = this.leafIndex.getAndIncrement();
+		Node leafNode = leaves[leafIndex];
+		out.writeObject(leafNode);
+		
+		// receive solution node from remote solver
+		Node solutionLeaf = (Node) in.readObject();
+		completedNodes.add(solutionLeaf);
 	}
 	
 	/**

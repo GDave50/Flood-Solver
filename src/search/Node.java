@@ -10,7 +10,8 @@ import game.SearchBoard;
 import main.Parameters;
 
 /**
- * This class represents a single search node.
+ * A node of the tree made from searching.
+ * 
  * @author Gage Davidson
  */
 public class Node implements Serializable {
